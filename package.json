@@ -38,5 +38,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://test.axelor.com"
+  "proxy": "http://sos.axelor.com:8080"
 }
