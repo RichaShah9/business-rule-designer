@@ -12,17 +12,14 @@ export class Service {
   fetch(url, method, options) {
     return fetch(url, options)
       .then(data => {
-        if (url.endsWith("/login.jsp") || ["head"].indexOf(method.toLowerCase()) !== -1) {
+        if (["head", "delete"].indexOf(method.toLowerCase()) !== -1)
           return data;
-        }
         let isJSON = data.headers
           .get("content-type")
           .includes("application/json");
         return isJSON ? data.json() : data;
       })
-      .catch(err => {
-        throw err;
-      });
+      .catch(err => {});
   }
 
   request(url, config = {}, data = {}) {

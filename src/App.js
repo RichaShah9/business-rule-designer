@@ -44,8 +44,8 @@ const fetchDiagram = async (id, setBusinessRule) => {
       "com.axelor.apps.orpea.planning.db.BusinessRule",
       id
     );
-    let { diagramXml } = res.data[0];
-    setBusinessRule(res.data[0]);
+    let { diagramXml } = (res && res.data[0]) || {};
+    setBusinessRule(res && res.data[0]);
     newBpmnDiagram(diagramXml);
   } else {
     newBpmnDiagram();
