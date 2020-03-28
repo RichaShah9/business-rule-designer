@@ -4,7 +4,7 @@ import ContextPadProvider from "bpmn-js/lib/features/context-pad/ContextPadProvi
 
 import { isAny } from "bpmn-js/lib/features/modeling/util/ModelingUtil";
 import { is } from "bpmn-js/lib/util/ModelUtil";
-import { assign, bind } from "min-dash";
+import { assign } from "min-dash";
 
 export default function CustomContextPadProvider(
   config,
@@ -15,10 +15,8 @@ export default function CustomContextPadProvider(
 ) {
   injector.invoke(ContextPadProvider, this);
 
-  var cached = bind(this.getContextPadEntries, this);
 
   this.getContextPadEntries = function(element) {
-    // var actions = cached(element);
     var modeling = this._modeling;
     var elementFactory = this._elementFactory;
     var autoPlace = this._autoPlace;

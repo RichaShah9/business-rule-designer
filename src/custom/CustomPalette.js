@@ -1,9 +1,13 @@
-import {
-  assign
-} from 'min-dash';
+import { assign } from "min-dash";
 
-export default function PaletteProvider(palette, create, elementFactory, spaceTool, lassoTool,translate) {
-
+export default function PaletteProvider(
+  palette,
+  create,
+  elementFactory,
+  spaceTool,
+  lassoTool,
+  translate
+) {
   this._create = create;
   this._elementFactory = elementFactory;
   this._spaceTool = spaceTool;
@@ -14,26 +18,21 @@ export default function PaletteProvider(palette, create, elementFactory, spaceTo
 }
 
 PaletteProvider.$inject = [
-  'palette',
-  'create',
-  'elementFactory',
-  'spaceTool',
-  'lassoTool',
-  'translate'
+  "palette",
+  "create",
+  "elementFactory",
+  "spaceTool",
+  "lassoTool",
+  "translate"
 ];
 
-
 PaletteProvider.prototype.getPaletteEntries = function(element) {
-
-  var actions  = {},
-      create = this._create,
-      elementFactory = this._elementFactory,
-      spaceTool = this._spaceTool,
-      lassoTool = this._lassoTool,
-      translate=this.translate;
+  var actions = {},
+    create = this._create,
+    elementFactory = this._elementFactory,
+    translate = this.translate;
 
   function createAction(type, group, className, title, options) {
-
     function createListener(event) {
       var shape = elementFactory.createShape(assign({ type: type }, options));
 
@@ -44,12 +43,12 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
       create.start(event, shape);
     }
 
-    var shortType = type.replace(/^bpmn:/, '');
+    var shortType = type.replace(/^bpmn:/, "");
 
     return {
       group: group,
       className: className,
-      title: title || 'Create ' + translate(shortType),
+      title: title || "Create " + translate(shortType),
       action: {
         dragstart: createListener,
         click: createListener
@@ -57,73 +56,26 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
     };
   }
 
-  function createParticipant(event, collapsed) {
-    create.start(event, elementFactory.createParticipantShape(collapsed));
-  }
-
   assign(actions, {
-    // 'custom-triangle': createAction(
-    //   'custom:triangle', 'custom', 'icon-custom-triangle'
-    // ),
-    // 'custom-circle': createAction(
-    //   'custom:circle', 'custom', 'icon-custom-circle'
-    // ),
-    // 'custom-separator': {
-    //   group: 'custom',
-    //   separator: true
-    // },
-    // 'lasso-tool': {
-    //   group: 'tools',
-    //   className: 'bpmn-icon-lasso-tool',
-    //   title: 'Activate the lasso tool',
-    //   action: {
-    //     click: function(event) {
-    //       lassoTool.activateSelection(event);
-    //     }
-    //   }
-    // },
-    // 'space-tool': {
-    //   group: 'tools',
-    //   className: 'bpmn-icon-space-tool',
-    //   title: 'Activate the create/remove space tool',
-    //   action: {
-    //     click: function(event) {
-    //       spaceTool.activateSelection(event);
-    //     }
-    //   }
-    // },
-    // 'tool-separator': {
-    //   group: 'tools',
-    //   separator: true
-    // },
-    'create.start-event': createAction(
-      'bpmn:StartEvent', 'event', 'bpmn-icon-start-event-none',
+    "create.start-event": createAction(
+      "bpmn:StartEvent",
+      "event",
+      "bpmn-icon-start-event-none"
     ),
-    // 'create.intermediate-event': createAction(
-    //   'bpmn:IntermediateThrowEvent', 'event', 'bpmn-icon-intermediate-event-none'
-    // ),
-    // 'create.end-event': createAction(
-    //   'bpmn:EndEvent', 'event', 'bpmn-icon-end-event-none'
-    // ),
-    'create.exclusive-gateway': createAction(
-      'bpmn:ExclusiveGateway', 'gateway', 'bpmn-icon-gateway-none'
+
+    "create.exclusive-gateway": createAction(
+      "bpmn:ExclusiveGateway",
+      "gateway",
+      "bpmn-icon-gateway-none"
     ),
-    'create.task': createAction(
-      'bpmn:Task', 'activity', 'bpmn-icon-task'
-    ),
-    'create.subprocess-expanded': createAction(
-      'bpmn:SubProcess', 'activity', 'bpmn-icon-subprocess-expanded', 'Create expanded SubProcess',
+    "create.task": createAction("bpmn:Task", "activity", "bpmn-icon-task"),
+    "create.subprocess-expanded": createAction(
+      "bpmn:SubProcess",
+      "activity",
+      "bpmn-icon-subprocess-expanded",
+      "Create expanded SubProcess",
       { isExpanded: true }
-    ),
-    // 'create.participant-expanded': {
-    //   group: 'collaboration',
-    //   className: 'bpmn-icon-participant',
-    //   title: 'Create Pool/Participant',
-    //   action: {
-    //     dragstart: createParticipant,
-    //     click: createParticipant
-    //   }
-    // }
+    )
   });
 
   return actions;
