@@ -92,8 +92,8 @@ const openBpmnDiagram = xml => {
         return;
       }
       businessObject = getBusinessObject(element);
-      let { suitable } = businessObject;
-      suitabilityScoreEl.value = suitable ? suitable : "";
+      let { expression } = businessObject;
+      suitabilityScoreEl.value = expression ? expression : "";
       suitabilityScoreEl.focus();
       analysisDetails = getExtensionElement(
         businessObject,
@@ -115,7 +115,7 @@ const openBpmnDiagram = xml => {
       }
       modeling.updateProperties(element, {
         extensionElements,
-        suitable: suitabilityScore
+        expression: suitabilityScore
       });
       qualityAssuranceEl.classList.add("hidden");
     });
@@ -136,25 +136,7 @@ function App() {
     name: ""
   });
 
-  const onChange = e => {
-    setBusinessRule({
-      ...businessRule,
-      [e.target.name]: e.target.value
-    });
-  };
-
   const onSave = () => {
-    // const obj = bpmnModeler._definitions.rootElements[0].flowElements;
-    // let array = Array.from(obj).filter(
-    //   d => d.$type === "bpmn:ExclusiveGateway"
-    // );
-
-    // Object.values(array).forEach(r => {
-    //   if (!r.outgoing || r.outgoing.length > 2) {
-    //     alert("there are more than two connected nodes");
-    //   }
-    // });
-
     bpmnModeler.saveXML({ format: true }, async function(err, xml) {
       await Service.add("com.axelor.apps.orpea.planning.db.BusinessRule", {
         ...businessRule,
@@ -162,7 +144,6 @@ function App() {
       });
     });
   };
-
   useEffect(() => {
     bpmnModeler = new BpmnModeler({
       container: "#bpmnview",
@@ -178,6 +159,18 @@ function App() {
   return (
     <div id="bpmncontainer">
       <div
+        style={{
+          height: 50,
+          background: "#2f4050",
+          display: "flex",
+          alignItems: "center"
+        }}
+      >
+        <span style={{ color: "white", marginLeft: 10 }}>
+          Business Rule Designer
+        </span>
+      </div>
+      <div
         id="propview"
         style={{
           width: "100%",
@@ -192,19 +185,34 @@ function App() {
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            padding:30
+            justifyContent: "left",
+            padding: 30
           }}
         >
-          <input name="name" value={businessRule.name} onChange={onChange} />
-          <button onClick={onSave} style={{ marginLeft: 10 }}>
+          <span
+            style={{
+              padding: 15
+            }}
+          >
+            {businessRule && businessRule.name}
+          </span>
+          <button
+            onClick={onSave}
+            style={{
+              width: 100,
+              marginLeft: 10,
+              padding: 10,
+              borderRadius: 25,
+              background: "rgba(0, 0, 0, 0.87)",
+              color: "white"
+            }}
+          >
             Save
           </button>
         </div>
       </div>
     </div>
   );
-  // }
 }
 
 function getExtensionElement(element, type) {
