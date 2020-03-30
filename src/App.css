@@ -40,10 +40,11 @@ body,
   border-radius: 2px;
   font-family: "Arial", sans-serif;
   padding: 10px;
+  width: 450px;
 }
 
-#expression-popup #form input[type="text"] {
-  width: 400px;
+#okay {
+  width: 50px !important;
 }
 
 #expression-popup #form #warning {
