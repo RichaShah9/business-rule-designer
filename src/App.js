@@ -16,16 +16,16 @@ let bpmnModeler = null;
 window.addEventListener("click", event => {
   const { target } = event;
   if (
-    target === qualityAssuranceEl ||
-    (qualityAssuranceEl && qualityAssuranceEl.contains(target))
+    target === expressionPopupEl ||
+    (expressionPopupEl && expressionPopupEl.contains(target))
   ) {
     return;
   }
-  qualityAssuranceEl && qualityAssuranceEl.classList.add("hidden");
+  expressionPopupEl && expressionPopupEl.classList.add("hidden");
 });
 
-const qualityAssuranceEl = document.getElementById("quality-assurance"),
-  suitabilityScoreEl = document.getElementById("suitability-score"),
+const expressionPopupEl = document.getElementById("expression-popup"),
+  expressionInputEl = document.getElementById("expression-input"),
   okayEl = document.getElementById("okay"),
   formEl = document.getElementById("form");
 
@@ -81,22 +81,22 @@ const openBpmnDiagram = xml => {
     }
     let canvas = bpmnModeler.get("canvas");
     const modeling = bpmnModeler.get("modeling");
-    let businessObject, element, suitabilityScore;
+    let businessObject, element, expression;
     function validate() {
       okayEl.disabled = false;
     }
     bpmnModeler.on("element.contextmenu", HIGH_PRIORITY, event => {
       event.originalEvent.preventDefault();
       event.originalEvent.stopPropagation();
-      qualityAssuranceEl && qualityAssuranceEl.classList.remove("hidden");
+      expressionPopupEl && expressionPopupEl.classList.remove("hidden");
       ({ element } = event);
       if (!element.parent) {
         return;
       }
       businessObject = getBusinessObject(element);
       let { expression } = businessObject;
-      suitabilityScoreEl.value = expression ? expression : "";
-      suitabilityScoreEl.focus();
+      expressionInputEl.value = expression ? expression : "";
+      expressionInputEl.focus();
       validate();
     });
 
@@ -104,22 +104,22 @@ const openBpmnDiagram = xml => {
       formEl.addEventListener("submit", event => {
         event.preventDefault();
         event.stopPropagation();
-        suitabilityScore = suitabilityScoreEl.value;
+        expression = expressionInputEl.value;
         modeling.updateProperties(element, {
-          expression: suitabilityScore
+          expression
         });
-        qualityAssuranceEl.classList.add("hidden");
+        expressionPopupEl.classList.add("hidden");
       });
 
     formEl &&
       formEl.addEventListener("keydown", event => {
         if (event.key === "Escape") {
-          qualityAssuranceEl.classList.add("hidden");
+          expressionPopupEl.classList.add("hidden");
         }
       });
 
-    suitabilityScoreEl &&
-      suitabilityScoreEl.addEventListener("input", validate);
+    expressionInputEl &&
+      expressionInputEl.addEventListener("input", validate);
     canvas.zoom("fit-viewport");
   });
 };

@@ -1,5 +1,5 @@
 {
-    "name": "QualityAssurance",
+    "name": "ExpressionModel",
     "uri": "http://some-company/schema/bpmn/qa",
     "prefix": "qa",
     "xml": {
