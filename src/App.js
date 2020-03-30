@@ -5,6 +5,7 @@ import { getBusinessObject } from "bpmn-js/lib/util/ModelUtil";
 import customControlsModule from "./custom";
 import qaExtension from "./resources/qa.json";
 import Service from "./services/Service";
+import { translate } from "./utils";
 
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-font/dist/css/bpmn-embedded.css";
@@ -127,7 +128,7 @@ function App() {
   const [businessRule, setBusinessRule] = React.useState({
     name: ""
   });
-
+  const [message, setMessage] = React.useState("");
   const onSave = () => {
     bpmnModeler.saveXML({ format: true }, async function(err, xml) {
       let isValid = true;
@@ -138,6 +139,7 @@ function App() {
       Object.values(array).forEach(r => {
         if (r.outgoing && r.outgoing.length > 2) {
           isValid = false;
+          setMessage(translate("Logic node has more than two connected nodes"));
           let x = document.getElementById("snackbar-alert");
           x.className = "show";
           setTimeout(function() {
@@ -151,14 +153,24 @@ function App() {
           ...businessRule,
           diagramXml: xml
         }));
-      if (res && res.data && res.data[0]) {
-        setBusinessRule(res.data[0]);
 
-        let x = document.getElementById("snackbar");
+      if (res.status === -1) {
+        let x = document.getElementById("snackbar-alert");
+        setMessage(res.data.message || res.data.title);
         x.className = "show";
+        x.value = res.data.title;
         setTimeout(function() {
           x.className = x.className.replace("show", "");
         }, 3000);
+      } else {
+        if (res && res.data && res.data[0]) {
+          setBusinessRule(res.data[0]);
+          let x = document.getElementById("snackbar");
+          x.className = "show";
+          setTimeout(function() {
+            x.className = x.className.replace("show", "");
+          }, 3000);
+        }
       }
     });
   };
@@ -185,7 +197,7 @@ function App() {
         }}
       >
         <span style={{ color: "white", marginLeft: 10, fontWeight: "bold" }}>
-          Business Rule Designer
+          {translate("Business Rule Designer")}
         </span>
       </div>
       <div
@@ -225,14 +237,12 @@ function App() {
               color: "white"
             }}
           >
-            Save
+            {translate("Save")}
           </button>
         </div>
       </div>
-      <div id="snackbar">Saved Successfully</div>
-      <div id="snackbar-alert">
-        Logic node has more than two connected nodes
-      </div>
+      <div id="snackbar">{translate("Saved Successfully")}</div>
+      <div id="snackbar-alert">{message}</div>
     </div>
   );
 }
