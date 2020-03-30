@@ -80,9 +80,8 @@ const openBpmnDiagram = xml => {
       return console.log("fail import xml");
     }
     let canvas = bpmnModeler.get("canvas");
-    const moddle = bpmnModeler.get("moddle"),
-      modeling = bpmnModeler.get("modeling");
-    let analysisDetails, businessObject, element, suitabilityScore;
+    const modeling = bpmnModeler.get("modeling");
+    let businessObject, element, suitabilityScore;
     function validate() {
       okayEl.disabled = false;
     }
@@ -98,10 +97,6 @@ const openBpmnDiagram = xml => {
       let { expression } = businessObject;
       suitabilityScoreEl.value = expression ? expression : "";
       suitabilityScoreEl.focus();
-      analysisDetails = getExtensionElement(
-        businessObject,
-        "qa:AnalysisDetails"
-      );
       validate();
     });
 
@@ -110,15 +105,7 @@ const openBpmnDiagram = xml => {
         event.preventDefault();
         event.stopPropagation();
         suitabilityScore = suitabilityScoreEl.value;
-        const extensionElements =
-          businessObject.extensionElements ||
-          moddle.create("bpmn:ExtensionElements");
-        if (!analysisDetails) {
-          analysisDetails = moddle.create("qa:AnalysisDetails");
-          extensionElements.get("values").push(analysisDetails);
-        }
         modeling.updateProperties(element, {
-          extensionElements,
           expression: suitabilityScore
         });
         qualityAssuranceEl.classList.add("hidden");
@@ -251,12 +238,4 @@ function App() {
   );
 }
 
-function getExtensionElement(element, type) {
-  if (!element.extensionElements) {
-    return;
-  }
-  return element.extensionElements.values.filter(extensionElement => {
-    return extensionElement.$instanceOf(type);
-  })[0];
-}
 export default App;
