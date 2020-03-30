@@ -30,6 +30,29 @@ export default function CustomContextPadProvider(
     function removeElement(e) {
       modeling.removeElements([element]);
     }
+    
+    function createSubprocess(event) {
+      var subProcess = elementFactory.createShape({
+        type: "bpmn:SubProcess",
+        x: 0,
+        y: 0,
+        isExpanded: true
+      });
+
+      var startEvent = elementFactory.createShape({
+        type: "bpmn:StartEvent",
+        x: 40,
+        y: 82,
+        parent: subProcess
+      });
+
+      create.start(event, [subProcess, startEvent], {
+        hints: {
+          autoSelect: [startEvent]
+        }
+      });
+    }
+
     var actions = {};
 
     if (element.type === "label") {
@@ -95,15 +118,19 @@ export default function CustomContextPadProvider(
             "append.gateway": appendAction(
               "bpmn:ExclusiveGateway",
               "bpmn-icon-gateway-none",
-              translate("Append Gateway")
+              "Append Gateway"
             )
           },
           {
-            "append.subprocess-expanded": appendAction(
-              "bpmn:SubProcess",
-              "bpmn-icon-subprocess-expanded",
-              translate("Append Sub process")
-            )
+            "create.subprocess-expanded": {
+              group: "activity",
+              className: "bpmn-icon-subprocess-expanded",
+              title: translate("Create expanded SubProcess"),
+              action: {
+                dragstart: createSubprocess,
+                click: createSubprocess
+              }
+            }
           }
         );
       }
