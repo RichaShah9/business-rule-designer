@@ -58,26 +58,26 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
 
   function createSubprocess(event) {
     var subProcess = elementFactory.createShape({
-      type: 'bpmn:SubProcess',
+      type: "bpmn:SubProcess",
       x: 0,
       y: 0,
       isExpanded: true
     });
 
     var startEvent = elementFactory.createShape({
-      type: 'bpmn:StartEvent',
+      type: "bpmn:StartEvent",
       x: 40,
       y: 82,
       parent: subProcess
     });
 
-    create.start(event, [ subProcess, startEvent ], {
+    create.start(event, [subProcess, startEvent], {
       hints: {
-        autoSelect: [ startEvent ]
+        autoSelect: [startEvent]
       }
     });
   }
-  
+
   assign(actions, {
     "create.start-event": createAction(
       "bpmn:StartEvent",
@@ -91,10 +91,10 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
       "bpmn-icon-gateway-none"
     ),
     "create.task": createAction("bpmn:Task", "activity", "bpmn-icon-task"),
-    'create.subprocess-expanded': {
-      group: 'activity',
-      className: 'bpmn-icon-subprocess-expanded',
-      title: translate('Create expanded SubProcess'),
+    "create.subprocess-expanded": {
+      group: "activity",
+      className: "bpmn-icon-subprocess-expanded",
+      title: translate("Create expanded SubProcess"),
       action: {
         dragstart: createSubprocess,
         click: createSubprocess
