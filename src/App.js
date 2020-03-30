@@ -144,13 +144,23 @@ function App() {
 
   const onSave = () => {
     bpmnModeler.saveXML({ format: true }, async function(err, xml) {
-      let res = await Service.add(
-        "com.axelor.apps.orpea.planning.db.BusinessRule",
-        {
+      let isValid = true;
+      const obj = bpmnModeler._definitions.rootElements[0].flowElements;
+      let array = Array.from(obj).filter(
+        d => d.$type === "bpmn:ExclusiveGateway"
+      );
+      Object.values(array).forEach(r => {
+        if (r.outgoing && r.outgoing.length > 2) {
+          isValid = false;
+          alert("there are more than two connected nodes");
+        }
+      });
+      let res =
+        isValid &&
+        (await Service.add("com.axelor.apps.orpea.planning.db.BusinessRule", {
           ...businessRule,
           diagramXml: xml
-        }
-      );
+        }));
       if (res && res.data && res.data[0]) {
         setBusinessRule(res.data[0]);
       }
