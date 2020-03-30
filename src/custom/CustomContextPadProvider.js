@@ -15,7 +15,6 @@ export default function CustomContextPadProvider(
 ) {
   injector.invoke(ContextPadProvider, this);
 
-
   this.getContextPadEntries = function(element) {
     var modeling = this._modeling;
     var elementFactory = this._elementFactory;
@@ -68,7 +67,7 @@ export default function CustomContextPadProvider(
     }
     if (isAny(businessObject, ["bpmn:FlowNode", "bpmn:InteractionNode"])) {
       assign(actions, {
-        'connect': {
+        connect: {
           group: "connect",
           className: "bpmn-icon-connection-multi",
           title: translate("Connect using transition"),
@@ -79,30 +78,35 @@ export default function CustomContextPadProvider(
         }
       });
     }
-    // if (isAny(businessObject, [ 'custom:triangle', 'custom:circle'])) {
-    //   assign(actions, {
-    //     'connect': {
-    //       group: 'connect',
-    //       className: 'bpmn-icon-connection-multi',
-    //       title: translate('Connect using custom connection'),
-    //       action: {
-    //         click: startConnect,
-    //         dragstart: startConnect
-    //       }
-    //     }
-    //   });
-    // }
     if (is(businessObject, "bpmn:FlowNode")) {
       if (!is(businessObject, "bpmn:EndEvent")) {
-        assign(actions, {
-          "append.append-task": appendAction(
-            "bpmn:Task",
-            "bpmn-icon-task",
-            "Append Task"
-          )
-        });
+        assign(
+          actions,
+          {
+            "append.append-task": appendAction(
+              "bpmn:Task",
+              "bpmn-icon-task",
+              "Append Task"
+            )
+          },
+          {
+            "append.gateway": appendAction(
+              "bpmn:ExclusiveGateway",
+              "bpmn-icon-gateway-none",
+              translate("Append Gateway")
+            )
+          },
+          {
+            "append.subprocess-expanded": appendAction(
+              "bpmn:SubProcess",
+              "bpmn-icon-subprocess-expanded",
+              translate("Append Sub process")
+            )
+          }
+        );
       }
     }
+
     assign(actions, {
       delete: {
         group: "edit",
