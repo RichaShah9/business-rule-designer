@@ -144,10 +144,16 @@ function App() {
 
   const onSave = () => {
     bpmnModeler.saveXML({ format: true }, async function(err, xml) {
-      await Service.add("com.axelor.apps.orpea.planning.db.BusinessRule", {
-        ...businessRule,
-        diagramXml: xml
-      });
+      let res = await Service.add(
+        "com.axelor.apps.orpea.planning.db.BusinessRule",
+        {
+          ...businessRule,
+          diagramXml: xml
+        }
+      );
+      if (res && res.data && res.data[0]) {
+        setBusinessRule(res.data[0]);
+      }
     });
   };
   useEffect(() => {
@@ -172,7 +178,7 @@ function App() {
           alignItems: "center"
         }}
       >
-        <span style={{ color: "white", marginLeft: 10 }}>
+        <span style={{ color: "white", marginLeft: 10, fontWeight: "bold" }}>
           Business Rule Designer
         </span>
       </div>
@@ -200,7 +206,7 @@ function App() {
               padding: 15
             }}
           >
-            <h6>{businessRule && businessRule.name}</h6>
+            {businessRule && businessRule.name}
           </span>
           <button
             onClick={onSave}
