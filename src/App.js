@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import "./App.css";
 import BpmnModeler from "bpmn-js/lib/Modeler";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-font/dist/css/bpmn-embedded.css";
@@ -9,16 +8,20 @@ import qaExtension from "./resources/qa.json";
 import { getBusinessObject } from "bpmn-js/lib/util/ModelUtil";
 
 import Service from "./services/Service";
+import "./App.css";
 
 const HIGH_PRIORITY = 1500;
 let bpmnModeler = null;
 
 window.addEventListener("click", event => {
   const { target } = event;
-  if (target === qualityAssuranceEl || qualityAssuranceEl.contains(target)) {
+  if (
+    target === qualityAssuranceEl ||
+    (qualityAssuranceEl && qualityAssuranceEl.contains(target))
+  ) {
     return;
   }
-  qualityAssuranceEl.classList.add("hidden");
+  qualityAssuranceEl && qualityAssuranceEl.classList.add("hidden");
 });
 
 const qualityAssuranceEl = document.getElementById("quality-assurance"),
@@ -86,7 +89,7 @@ const openBpmnDiagram = xml => {
     bpmnModeler.on("element.contextmenu", HIGH_PRIORITY, event => {
       event.originalEvent.preventDefault();
       event.originalEvent.stopPropagation();
-      qualityAssuranceEl.classList.remove("hidden");
+      qualityAssuranceEl && qualityAssuranceEl.classList.remove("hidden");
       ({ element } = event);
       if (!element.parent) {
         return;
@@ -102,31 +105,34 @@ const openBpmnDiagram = xml => {
       validate();
     });
 
-    formEl.addEventListener("submit", event => {
-      event.preventDefault();
-      event.stopPropagation();
-      suitabilityScore = suitabilityScoreEl.value;
-      const extensionElements =
-        businessObject.extensionElements ||
-        moddle.create("bpmn:ExtensionElements");
-      if (!analysisDetails) {
-        analysisDetails = moddle.create("qa:AnalysisDetails");
-        extensionElements.get("values").push(analysisDetails);
-      }
-      modeling.updateProperties(element, {
-        extensionElements,
-        expression: suitabilityScore
-      });
-      qualityAssuranceEl.classList.add("hidden");
-    });
-
-    formEl.addEventListener("keydown", event => {
-      if (event.key === "Escape") {
+    formEl &&
+      formEl.addEventListener("submit", event => {
+        event.preventDefault();
+        event.stopPropagation();
+        suitabilityScore = suitabilityScoreEl.value;
+        const extensionElements =
+          businessObject.extensionElements ||
+          moddle.create("bpmn:ExtensionElements");
+        if (!analysisDetails) {
+          analysisDetails = moddle.create("qa:AnalysisDetails");
+          extensionElements.get("values").push(analysisDetails);
+        }
+        modeling.updateProperties(element, {
+          extensionElements,
+          expression: suitabilityScore
+        });
         qualityAssuranceEl.classList.add("hidden");
-      }
-    });
+      });
 
-    suitabilityScoreEl.addEventListener("input", validate);
+    formEl &&
+      formEl.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          qualityAssuranceEl.classList.add("hidden");
+        }
+      });
+
+    suitabilityScoreEl &&
+      suitabilityScoreEl.addEventListener("input", validate);
     canvas.zoom("fit-viewport");
   });
 };
@@ -186,7 +192,7 @@ function App() {
             display: "flex",
             alignItems: "center",
             justifyContent: "left",
-            padding: 30
+            padding: 20
           }}
         >
           <span
@@ -194,7 +200,7 @@ function App() {
               padding: 15
             }}
           >
-            {businessRule && businessRule.name}
+            <h6>{businessRule && businessRule.name}</h6>
           </span>
           <button
             onClick={onSave}
