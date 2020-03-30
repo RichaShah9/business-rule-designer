@@ -152,7 +152,11 @@ function App() {
       Object.values(array).forEach(r => {
         if (r.outgoing && r.outgoing.length > 2) {
           isValid = false;
-          alert("there are more than two connected nodes");
+          let x = document.getElementById("snackbar-alert");
+          x.className = "show";
+          setTimeout(function() {
+            x.className = x.className.replace("show", "");
+          }, 3000);
         }
       });
       let res =
@@ -163,6 +167,12 @@ function App() {
         }));
       if (res && res.data && res.data[0]) {
         setBusinessRule(res.data[0]);
+
+        let x = document.getElementById("snackbar");
+        x.className = "show";
+        setTimeout(function() {
+          x.className = x.className.replace("show", "");
+        }, 3000);
       }
     });
   };
@@ -232,6 +242,10 @@ function App() {
             Save
           </button>
         </div>
+      </div>
+      <div id="snackbar">Saved Successfully</div>
+      <div id="snackbar-alert">
+        Logic node has more than two connected nodes
       </div>
     </div>
   );
