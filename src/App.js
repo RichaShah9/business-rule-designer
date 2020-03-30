@@ -118,8 +118,7 @@ const openBpmnDiagram = xml => {
         }
       });
 
-    expressionInputEl &&
-      expressionInputEl.addEventListener("input", validate);
+    expressionInputEl && expressionInputEl.addEventListener("input", validate);
     canvas.zoom("fit-viewport");
   });
 };
