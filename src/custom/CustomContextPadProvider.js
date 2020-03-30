@@ -30,7 +30,7 @@ export default function CustomContextPadProvider(
     function removeElement(e) {
       modeling.removeElements([element]);
     }
-    
+
     function createSubprocess(event) {
       var subProcess = elementFactory.createShape({
         type: "bpmn:SubProcess",
@@ -122,10 +122,10 @@ export default function CustomContextPadProvider(
             )
           },
           {
-            "create.subprocess-expanded": {
+            "append.subprocess-expanded": {
               group: "activity",
               className: "bpmn-icon-subprocess-expanded",
-              title: translate("Create expanded SubProcess"),
+              title: "Append expanded SubProcess",
               action: {
                 dragstart: createSubprocess,
                 click: createSubprocess
