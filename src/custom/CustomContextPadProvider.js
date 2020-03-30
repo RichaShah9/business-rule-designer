@@ -125,7 +125,7 @@ export default function CustomContextPadProvider(
             "append.subprocess-expanded": {
               group: "activity",
               className: "bpmn-icon-subprocess-expanded",
-              title: "Append expanded SubProcess",
+              title: "Append Sub Process",
               action: {
                 dragstart: createSubprocess,
                 click: createSubprocess
