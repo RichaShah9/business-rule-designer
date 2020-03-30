@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import BpmnModeler from "bpmn-js/lib/Modeler";
-import "bpmn-js/dist/assets/diagram-js.css";
-import "bpmn-font/dist/css/bpmn-embedded.css";
-import customControlsModule from "./custom";
-import qaExtension from "./resources/qa.json";
-
 import { getBusinessObject } from "bpmn-js/lib/util/ModelUtil";
 
+import customControlsModule from "./custom";
+import qaExtension from "./resources/qa.json";
 import Service from "./services/Service";
+
+import "bpmn-js/dist/assets/diagram-js.css";
+import "bpmn-font/dist/css/bpmn-embedded.css";
 import "./App.css";
 
 const HIGH_PRIORITY = 1500;
