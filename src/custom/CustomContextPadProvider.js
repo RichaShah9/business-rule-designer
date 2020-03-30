@@ -38,12 +38,14 @@ export default function CustomContextPadProvider(
     function appendAction(type, className, title, options) {
       if (typeof title !== "string") {
         options = title;
-        title = "Append " + type.replace(/^bpmn\:/, "");
+        title = "Append " + type.replace(/^bpmn:/, "");
       }
 
       function appendStart(event, element) {
         var shape = elementFactory.createShape(assign({ type: type }, options));
-        create.start(event, shape, element);
+        create.start(event, shape, {
+          source: element
+        });
       }
 
       var append = autoPlace
