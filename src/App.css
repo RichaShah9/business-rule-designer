@@ -58,6 +58,10 @@ body,
   color: #111;
 }
 
+#expression-input{
+  border: solid 1px #ccc;
+}
+
 #hint {
   bottom: 20px;
   left: 20px;
