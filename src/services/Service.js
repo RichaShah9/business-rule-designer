@@ -5,7 +5,7 @@ export class Service {
     headers.append("Content-Type", "application/json");
     headers.append("X-Requested-With", "XMLHttpRequest");
     this.baseURL =
-      process.env.NODE_ENV === "production" ? "../.." : "/op-app";
+      process.env.NODE_ENV === "production" ? "../.." : "/orpea-app";
     this.headers = headers;
   }
 

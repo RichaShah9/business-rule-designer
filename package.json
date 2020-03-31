@@ -38,5 +38,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://sos.axelor.com:8080"
+  "homepage": "./",
+  "proxy": "http://localhost:8080"
 }
