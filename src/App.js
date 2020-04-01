@@ -150,7 +150,9 @@ function App() {
         if (r.outgoing && r.outgoing.length > 1) {
           isValid = false;
           setMessage(
-            translate(`Node ${r.name} should have only one outgoing node`)
+            translate(
+              `Node ${r && r.name ? r.name : ""} should have only one outgoing node`
+            )
           );
           let x = document.getElementById("snackbar-alert");
           x.className = "show";
