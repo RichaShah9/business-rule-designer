@@ -6,6 +6,8 @@ import { isAny } from "bpmn-js/lib/features/modeling/util/ModelingUtil";
 import { is } from "bpmn-js/lib/util/ModelUtil";
 import { assign } from "min-dash";
 
+import { translate as translateMessage } from "../utils";
+
 export default function CustomContextPadProvider(
   config,
   injector,
@@ -24,8 +26,41 @@ export default function CustomContextPadProvider(
     var connect = this._connect;
     var businessObject = element.businessObject;
 
+    function showAlert(isLogicNode) {
+      let x = document.getElementById("snackbar-alert");
+      x.className = "show";
+      x.innerHTML = translateMessage(
+        `${isLogicNode ? "Logic node" : "Node"} can have only ${
+          isLogicNode ? "two" : "one"
+        } outgoing node`
+      );
+      setTimeout(function() {
+        x.className = x.className.replace("show", "");
+      }, 3000);
+    }
+
+    function shouldConnectNode(element) {
+      if (
+        element.type !== "bpmn:ExclusiveGateway" &&
+        element.outgoing.length > 0
+      ) {
+        showAlert(false);
+        return false;
+      }
+      if (
+        element.type === "bpmn:ExclusiveGateway" &&
+        element.outgoing.length > 1
+      ) {
+        showAlert(true);
+        return false;
+      }
+      return true;
+    }
+
     function startConnect(event, element, autoActivate) {
-      connect.start(event, element, autoActivate);
+      if (shouldConnectNode(element)) {
+        connect.start(event, element, autoActivate);
+      }
     }
     function removeElement(e) {
       modeling.removeElements([element]);
@@ -65,21 +100,27 @@ export default function CustomContextPadProvider(
       }
 
       function appendStart(event, element) {
-        var shape = elementFactory.createShape(assign({ type: type }, options));
-        create.start(event, shape, {
-          source: element
-        });
+        if (shouldConnectNode(element)) {
+          var shape = elementFactory.createShape(
+            assign({ type: type }, options)
+          );
+          create.start(event, shape, {
+            source: element
+          });
+        }
       }
 
       var append = autoPlace
         ? function(event, element) {
-            var shape = elementFactory.createShape(
-              assign({ type: type }, options)
-            );
-
-            autoPlace.append(element, shape);
+            if (shouldConnectNode(element)) {
+              var shape = elementFactory.createShape(
+                assign({ type: type }, options)
+              );
+              autoPlace.append(element, shape);
+            }
           }
         : appendStart;
+
       return {
         group: "model",
         className: className,

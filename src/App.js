@@ -136,6 +136,24 @@ function App() {
       let array = Array.from(obj).filter(
         d => d.$type === "bpmn:ExclusiveGateway"
       );
+
+      let nodesExceptLogicNode = Array.from(obj).filter(
+        d => d.$type !== "bpmn:ExclusiveGateway"
+      );
+      Object.values(nodesExceptLogicNode).forEach(r => {
+        if (r.outgoing && r.outgoing.length > 1) {
+          isValid = false;
+          setMessage(
+            translate(`Node ${r.name} should have only one outgoing node`)
+          );
+          let x = document.getElementById("snackbar-alert");
+          x.className = "show";
+          setTimeout(function() {
+            x.className = x.className.replace("show", "");
+          }, 3000);
+        }
+      });
+
       Object.values(array).forEach(r => {
         if (r.outgoing && r.outgoing.length > 2) {
           isValid = false;
@@ -147,6 +165,7 @@ function App() {
           }, 3000);
         }
       });
+
       let res =
         isValid &&
         (await Service.add("com.axelor.apps.orpea.planning.db.BusinessRule", {
