@@ -78,7 +78,13 @@ const newBpmnDiagram = rec => {
 const openBpmnDiagram = xml => {
   bpmnModeler.importXML(xml, error => {
     if (error) {
-      return console.log("fail import xml");
+      let x = document.getElementById("snackbar-alert");
+      x.className = "show";
+      x.innerHTML = translate("Error! Can't import XML");
+      setTimeout(function() {
+        x.className = x.className.replace("show", "");
+      }, 3000);
+      return console.log("Error! Can't import XMLl");
     }
     let canvas = bpmnModeler.get("canvas");
     const modeling = bpmnModeler.get("modeling");
