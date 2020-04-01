@@ -21,7 +21,13 @@
     <script src="../../lib/jquery.ui/js/jquery.js"></script>
     <script src="../../js/axelor.ns.js"></script>
     <script src="../../js/lib/i18n.js"></script>
-
+    <script>
+      window.onload = function() {
+        document.getElementById("expression-title").innerHTML = window._t(
+          "Add Expression"
+        );
+      };
+    </script>
     <title>BPMN App</title>
   </head>
   <body>
@@ -30,10 +36,10 @@
     <div id="expression-popup" class="panel hidden">
       <form id="form">
         <p>
-          <b>Ajouter expression</b>
+          <b id="expression-title"></b>
         </p>
         <br />
-        <textarea id="expression-input" cols="60" rows="5"></textarea>
+        <textarea id="expression-input" cols="60" rows="10"></textarea>
         <br />
         <br />
         <input id="okay" type="submit" value="Ok" />
