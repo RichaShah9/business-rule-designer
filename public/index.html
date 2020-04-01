@@ -24,7 +24,7 @@
     <script>
       window.onload = function() {
         document.getElementById("expression-title").innerHTML = window._t(
-          "Add Expression"
+          "Expression"
         );
       };
     </script>
@@ -35,10 +35,11 @@
     <div id="root"></div>
     <div id="expression-popup" class="panel hidden">
       <form id="form">
-        <p>
-          <b id="expression-title"></b>
-        </p>
+        <div class="node-title"><b id="related-node-for-expression"></b></div>
         <br />
+        <p style="padding:10px 0px">
+          <span id="expression-title"></span>
+        </p>
         <textarea id="expression-input" cols="60" rows="10"></textarea>
         <br />
         <br />

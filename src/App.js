@@ -27,6 +27,9 @@ window.addEventListener("click", event => {
 
 const expressionPopupEl = document.getElementById("expression-popup"),
   expressionInputEl = document.getElementById("expression-input"),
+  nodeRelatedToExpressionEl = document.getElementById(
+    "related-node-for-expression"
+  ),
   okayEl = document.getElementById("okay"),
   formEl = document.getElementById("form");
 
@@ -101,8 +104,9 @@ const openBpmnDiagram = xml => {
         return;
       }
       businessObject = getBusinessObject(element);
-      let { expression } = businessObject;
-      expressionInputEl.value = expression ? expression : "";
+      let { expression = "", name = "" } = businessObject;
+      expressionInputEl.value = expression;
+      nodeRelatedToExpressionEl.innerHTML = name;
       expressionInputEl.focus();
       validate();
     });

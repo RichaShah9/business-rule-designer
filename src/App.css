@@ -94,6 +94,10 @@ body,
   animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 
+.node-title{
+  text-align: center;
+}
+
 @-webkit-keyframes fadein {
   from {
     bottom: 0;
