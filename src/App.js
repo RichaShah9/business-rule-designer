@@ -135,42 +135,42 @@ function App() {
     name: ""
   });
   const [message, setMessage] = React.useState("");
+
+  const showAlert = (id, message) => {
+    setMessage(translate(message));
+    let x = document.getElementById(id);
+    x.className = "show";
+    setTimeout(function() {
+      x.className = x.className.replace("show", "");
+    }, 3000);
+  };
+
   const onSave = () => {
     bpmnModeler.saveXML({ format: true }, async function(err, xml) {
       let isValid = true;
       const obj = bpmnModeler._definitions.rootElements[0].flowElements;
-      let array = Array.from(obj).filter(
-        d => d.$type === "bpmn:ExclusiveGateway"
-      );
-
-      let nodesExceptLogicNode = Array.from(obj).filter(
-        d => d.$type !== "bpmn:ExclusiveGateway"
-      );
-      Object.values(nodesExceptLogicNode).forEach(r => {
-        if (r.outgoing && r.outgoing.length > 1) {
-          isValid = false;
-          setMessage(
-            translate(
-              `Node ${r && r.name ? r.name : ""} should have only one outgoing node`
-            )
-          );
-          let x = document.getElementById("snackbar-alert");
-          x.className = "show";
-          setTimeout(function() {
-            x.className = x.className.replace("show", "");
-          }, 3000);
-        }
-      });
-
-      Object.values(array).forEach(r => {
-        if (r.outgoing && r.outgoing.length > 2) {
-          isValid = false;
-          setMessage(translate("Logic node has more than two connected nodes"));
-          let x = document.getElementById("snackbar-alert");
-          x.className = "show";
-          setTimeout(function() {
-            x.className = x.className.replace("show", "");
-          }, 3000);
+      const modelElements = Array.from(obj);
+      Object.values(modelElements).forEach(r => {
+        if (r.$type !== "bpmn:ExclusiveGateway") {
+          if (r.outgoing && r.outgoing.length > 1) {
+            isValid = false;
+            showAlert(
+              "snackbar-alert",
+              `Node ${
+                r && r.name ? r.name : ""
+              } should have only one outgoing node`
+            );
+            return;
+          }
+        } else {
+          if (r.outgoing && r.outgoing.length > 2) {
+            isValid = false;
+            showAlert(
+              "snackbar-alert",
+              "Logic node has more than two connected nodes"
+            );
+            return;
+          }
         }
       });
 
@@ -182,13 +182,7 @@ function App() {
         }));
 
       if (res.status === -1) {
-        let x = document.getElementById("snackbar-alert");
-        setMessage(res.data.message || res.data.title);
-        x.className = "show";
-        x.value = res.data.title;
-        setTimeout(function() {
-          x.className = x.className.replace("show", "");
-        }, 3000);
+        showAlert("snackbar-alert", res.data.message || res.data.title);
       } else {
         if (res && res.data && res.data[0]) {
           setBusinessRule(res.data[0]);
