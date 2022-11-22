@@ -14,7 +14,7 @@
     "min-dash": "^3.5.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
+    "react-scripts": "5.0.1",
     "tiny-svg": "^2.2.2"
   },
   "scripts": {
